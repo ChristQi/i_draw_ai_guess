@@ -1,6 +1,6 @@
 # I Draw, AI Guess - 赛博朋克风格"我画你猜"游戏
 
-这是一个基于 Flask 和 Qwen 大模型的 Web 应用，实现了赛博朋克风格的"我画你猜"游戏。玩家可以在画布上绘制图像，AI 会尝试识别图像内容。
+这是一个基于 Flask 和视觉理解大模型的 Web 应用，实现了赛博朋克风格的"我画你猜"游戏。玩家可以在画布上绘制图像，AI 会尝试识别图像内容。
 
 ## 功能特性
 
@@ -12,7 +12,7 @@
   - 画笔、橡皮擦、虚线工具
   - 多种颜色和笔刷大小
   - 上传图片功能
-- **智能 AI 识别**: 使用兼容 OpenAI API 的 multimodal 模型进行图像识别。
+- **智能 AI 识别**: 使用兼容 OpenAI API 的视觉理解大模型进行图像识别。
 - **游戏历史记录**: 保存绘画历史和 AI 猜测结果。
 - **统计系统**: 记录胜率和游戏数据，并根据胜率显示不同等级。
 
@@ -20,7 +20,7 @@
 
 - **后端**: Python, Flask
 - **前端**: HTML5, CSS3, JavaScript (ES6)
-- **AI 模型**: 兼容 OpenAI API 的 multimodal 模型
+- **AI 模型**: 兼容 OpenAI API 的视觉理解大模型
 - **数据库**: SQLite
 - **依赖管理**: pip, virtual environment
 
@@ -61,12 +61,13 @@
      ```bash
      cp .env.example .env
      ```
-   - 编辑 `.env` 文件，填入你的 OpenAI 兼容 API 配置:
+   - 编辑 `.env` 文件，填入你的视觉理解大模型 API 配置:
      ```
      BASE_URL=your_api_base_url_here
      API_KEY=your_api_key_here
      MODEL=your_model_name_here
      ```
+   - **推荐使用 [ModelScope API-Inference](https://modelscope.cn/docs/model-service/API-Inference/intro)，提供每天2000次免费调用，畅玩这个游戏。**
 
 5. **运行应用**:
    ```bash
@@ -113,5 +114,6 @@ i_draw_ai_guess/
 ## 致谢
 
 - [Qwen3-Coder](https://github.com/QwenLM/qwen-code?tab=readme-ov-file) - 强大的 AI 模型支持
+- [ModelScope](https://modelscope.cn/) - 模型开放平台
 - [OpenAI](https://openai.com/) - API 规范
 - [Flask](https://flask.palletsprojects.com/) - Python Web 框架
