@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CYBER GUESS - 赛博朋克画AI猜</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <h1>CYBER GUESS</h1>
+        <div class="win-rate-level" id="winRateLevel"></div>
+        <div class="win-rate-display" id="winRateDisplay">当前等级: 青铜</div>
+        <div class="mode-selector">
+            <button id="freeModeBtn" class="mode-btn active">自由模式</button>
+            <button id="guessModeBtn" class="mode-btn">猜词模式</button>
+        </div>
+        <div class="main-content">
+            <div class="game-section">
+                <div class="game-area">
+                    <div class="target-word" id="targetWord">
+                        <span>系统提示词：<span id="targetWordValue">苹果</span></span>
+                        <button id="changeWordBtn" class="change-word-btn">换一个</button>
+                    </div>
+                    <canvas id="drawingCanvas"></canvas>
+                    <div class="controls">
+                        <button id="clearBtn" class="control-btn" title="清空画布">
+                            <i class="fas fa-eraser"></i>
+                            <span>清空画布</span>
+                        </button>
+                        <button id="guessBtn" class="control-btn guess-btn" title="AI猜猜看">
+                            <i class="fas fa-robot"></i>
+                            <span>AI猜猜看</span>
+                        </button>
+                        <button id="uploadBtn" class="control-btn" title="上传图片">
+                            <i class="fas fa-upload"></i>
+                            <span>上传图片</span>
+                        </button>
+                        <input type="file" id="imageUpload" accept="image/*" style="display: none;">
+                        <div class="tool-selector">
+                            <button id="brushTool" class="tool-btn active" title="画笔">
+                                <i class="fas fa-paintbrush"></i>
+                            </button>
+                            <button id="eraserTool" class="tool-btn" title="橡皮擦">
+                                <i class="fas fa-eraser"></i>
+                            </button>
+                            <button id="dottedTool" class="tool-btn" title="虚线">
+                                <i class="fas fa-grip-lines"></i>
+                            </button>
+                        </div>
+                        <div class="brush-size">
+                            <i id="sizeIcon" class="fas fa-paintbrush"></i>
+                            <input type="range" id="brushSize" min="1" max="30" value="5">
+                            <span id="brushSizeValue">5</span>px
+                        </div>
+                        <div class="color-picker">
+                            <input type="color" id="colorPicker" value="#000000">
+                        </div>
+                        <div class="preset-colors">
+                            <button class="color-btn" style="background-color: #000000;" data-color="#000000"></button>
+                            <button class="color-btn" style="background-color: #ff0000;" data-color="#ff0000"></button>
+                            <button class="color-btn" style="background-color: #00ff00;" data-color="#00ff00"></button>
+                            <button class="color-btn" style="background-color: #0000ff;" data-color="#0000ff"></button>
+                            <button class="color-btn" style="background-color: #ffff00;" data-color="#ffff00"></button>
+                            <button class="color-btn" style="background-color: #00ffff;" data-color="#00ffff"></button>
+                            <button class="color-btn" style="background-color: #ff00ff;" data-color="#ff00ff"></button>
+                            <button class="color-btn" style="background-color: #ffffff;" data-color="#ffffff"></button>
+                        </div>
+                    </div>
+                </div>
+                <div class="result-area">
+                    <h2>AI的猜测:</h2>
+                    <div id="aiGuess">请先画一些内容，然后点击"AI猜猜看"</div>
+                </div>
+            </div>
+            <div class="sidebar">
+                <div class="history-section">
+                    <div class="history-header">
+                        <h2>游戏历史</h2>
+                        <button id="clearHistoryBtn" class="clear-history-btn" title="清空历史">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                    <div class="history-list-container">
+                        <div id="historyList"></div>
+                    </div>
+                </div>
+                <div class="instructions-section">
+                    <h2>游戏说明</h2>
+                    <ul>
+                        <li>在画布上画出你想表达的物品</li>
+                        <li>可以调整画笔大小和颜色</li>
+                        <li>点击"AI猜猜看"让AI识别你的画作</li>
+                        <li>点击"上传图片"可以上传图片让AI识别</li>
+                        <li>AI会告诉你它认为你画的是什么</li>
+                        <li>游戏历史会保存你的画作和AI的猜测</li>
+                    </ul>
+                </div>
+                <div class="scoreboard" id="scoreboard">
+                    <div class="win-rate">胜率: <span id="winRate">0%</span></div>
+                    <div class="stats">
+                        <div class="stat-item">
+                            <span class="stat-label">总猜数:</span>
+                            <span class="stat-value" id="totalGuesses">0</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">猜对数:</span>
+                            <span class="stat-value" id="correctGuesses">0</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">猜错数:</span>
+                            <span class="stat-value" id="wrongGuesses">0</span>
+                        </div>
+                    </div>
+                    <div class="reset-stats">
+                        <button id="resetStatsBtn" class="reset-stats-btn">重置统计</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Feedback modal for free mode -->
+    <div id="feedbackModal" class="modal">
+        <div class="modal-content feedback-modal">
+            <span class="close">&times;</span>
+            <h2>AI猜测反馈</h2>
+            <p>AI猜测结果：<span id="feedbackGuessResult"></span></p>
+            <div class="feedback-buttons">
+                <button id="feedbackSatisfied" class="feedback-btn satisfied">满意</button>
+                <button id="feedbackUnsatisfied" class="feedback-btn unsatisfied">不满意</button>
+                <button id="feedbackSkip" class="feedback-btn skip">放弃</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Image modal for enlarged view -->
+    <div id="imageModal" class="modal">
+        <span class="close">&times;</span>
+        <img class="modal-content" id="enlargedImage">
+    </div>
+    
+    <!-- Guess mode result modal -->
+    <div id="guessResultModal" class="modal">
+        <div class="modal-content feedback-modal">
+            <span class="close">&times;</span>
+            <h2 id="guessResultTitle">AI猜测结果</h2>
+            <p>AI猜测：<span id="guessResultText"></span></p>
+            <p>正确答案：<span id="correctAnswerText"></span></p>
+            <div class="feedback-buttons">
+                <!-- Buttons will be dynamically inserted here -->
+            </div>
+        </div>
+    </div>
+    
+    <script src="script.js"></script>
+    <script src="debug.js"></script>
+</body>
+</html>
